@@ -10,7 +10,7 @@ workflows:
     environment:
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: com.yourname.flappybuttdog  # must match App Store Connect
+        bundle_identifier: com.99cshea.flappybuttdog
       xcode: latest
       cocoapods: default
 
