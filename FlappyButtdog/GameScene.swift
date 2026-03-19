@@ -19,7 +19,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var buttdog: SKSpriteNode!
     private var scoreLabel: SKLabelNode!
     private var bestLabel: SKLabelNode!
-    private var messageLabel: SKLabelNode!
+    private var messageLabel: SKNode!
     private var groundNode: SKSpriteNode!
     private var scrollingGround: SKNode!
 
@@ -166,8 +166,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.fontColor = .white
         scoreLabel.position  = CGPoint(x: size.width / 2, y: size.height - 90)
         scoreLabel.zPosition = 20
-        scoreLabel.shadowColor = UIColor(white: 0, alpha: 0.4)
-        scoreLabel.shadowOffset = CGSize(width: 2, height: -2)
         scoreLabel.text = "0"
         scoreLabel.isHidden = true
         addChild(scoreLabel)
@@ -267,7 +265,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         sensor.position = CGPoint(x: 0, y: gapBottom + pipeGap / 2)
         sensor.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 8, height: pipeGap))
         sensor.physicsBody?.isDynamic = false
-        sensor.physicsBody?.isSensor  = true
+        sensor.physicsBody?.collisionBitMask = 0
         sensor.physicsBody?.categoryBitMask    = Physics.gap
         sensor.physicsBody?.contactTestBitMask = Physics.buttdog
         container.addChild(sensor)
