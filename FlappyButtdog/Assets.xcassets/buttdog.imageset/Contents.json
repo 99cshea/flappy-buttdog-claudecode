@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "buttdog.webp",
+      "filename" : "buttdog.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "buttdog.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "buttdog.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
