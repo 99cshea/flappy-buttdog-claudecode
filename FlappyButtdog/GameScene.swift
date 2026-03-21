@@ -83,7 +83,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         tootPitch = min(tootPitch + 0.07, 2.0)
         player.stop()
         player.currentTime = 0
-        player.rate = tootPitch
+        player.rate = tootPitch + Float.random(in: -0.12...0.12)
         player.play()
     }
 
