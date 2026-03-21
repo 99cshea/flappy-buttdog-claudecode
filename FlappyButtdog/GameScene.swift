@@ -65,10 +65,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     private func setupAudio() {
         tootPlayer  = makeAudioPlayer("toot")
+        tootPlayer?.enableRate = true
+        tootPlayer?.prepareToPlay()
         coinPlayer  = makeAudioPlayer("coin")
         punchPlayer = makeAudioPlayer("punch")
         fartPlayer  = makeAudioPlayer("bigfart")
-        tootPlayer?.enableRate = true
     }
 
     private func makeAudioPlayer(_ name: String) -> AVAudioPlayer? {
