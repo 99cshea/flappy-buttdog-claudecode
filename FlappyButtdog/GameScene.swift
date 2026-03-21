@@ -99,15 +99,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         sky.zPosition = -10
         addChild(sky)
 
-        // Simple cloud sprites
+        // Simple cloud sprites — start off-screen right so they slide in naturally
         for i in 0..<3 {
             let cloud = makeCloud()
-            cloud.position = CGPoint(x: CGFloat(i) * size.width / 2.5 + 60,
-                                     y: size.height * 0.72 + CGFloat(i) * 30)
+            let startX = size.width + 120 + CGFloat(i) * (size.width / 2.5)
+            let startY = size.height * 0.72 + CGFloat(i) * 30
+            cloud.position = CGPoint(x: startX, y: startY)
             cloud.zPosition = -5
             addChild(cloud)
-            let move = SKAction.moveBy(x: -size.width - 120, y: 0, duration: 18 + Double(i) * 4)
-            let reset = SKAction.moveBy(x: size.width + 240, y: 0, duration: 0)
+            let travelDist = startX + 120  // travel until 120pt off-screen left
+            let duration = (travelDist / (size.width + 120)) * (18 + Double(i) * 4)
+            let move = SKAction.moveBy(x: -travelDist, y: 0, duration: duration)
+            let reset = SKAction.run { cloud.position = CGPoint(x: startX, y: startY) }
             cloud.run(SKAction.repeatForever(SKAction.sequence([move, reset])))
         }
     }
@@ -204,10 +207,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     private func setupHUD() {
+        let safeTop = view?.safeAreaInsets.top ?? 0
         scoreLabel = SKLabelNode(fontNamed: "AvenirNext-Heavy")
         scoreLabel.fontSize  = 64
         scoreLabel.fontColor = .white
-        scoreLabel.position  = CGPoint(x: size.width / 2, y: size.height - 90)
+        scoreLabel.position  = CGPoint(x: size.width / 2, y: size.height - safeTop - 80)
         scoreLabel.zPosition = 20
         scoreLabel.text = "0"
         scoreLabel.isHidden = true
@@ -216,7 +220,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bestLabel = SKLabelNode(fontNamed: "AvenirNext-Medium")
         bestLabel.fontSize  = 22
         bestLabel.fontColor = SKColor(white: 1, alpha: 0.85)
-        bestLabel.position  = CGPoint(x: size.width / 2, y: size.height - 120)
+        bestLabel.position  = CGPoint(x: size.width / 2, y: size.height - safeTop - 110)
         bestLabel.zPosition = 20
         bestLabel.isHidden  = true
         addChild(bestLabel)
