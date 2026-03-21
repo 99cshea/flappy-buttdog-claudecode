@@ -8,8 +8,10 @@ workflows:
       events:
         - push
       branch_patterns:
-        - pattern: master
+        - pattern: 'master'
           include: true
+          source: true
+          
 
     integrations:
       app_store_connect: AppStoreConnectKey   # name this connection in Codemagic UI
