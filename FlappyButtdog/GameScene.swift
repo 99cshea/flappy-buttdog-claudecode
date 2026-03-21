@@ -207,11 +207,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     private func setupHUD() {
-        let safeTop = view?.safeAreaInsets.top ?? 0
         scoreLabel = SKLabelNode(fontNamed: "AvenirNext-Heavy")
         scoreLabel.fontSize  = 64
         scoreLabel.fontColor = .white
-        scoreLabel.position  = CGPoint(x: size.width / 2, y: size.height - safeTop - 80)
+        scoreLabel.position  = CGPoint(x: size.width / 2, y: size.height - 80)
         scoreLabel.zPosition = 20
         scoreLabel.text = "0"
         scoreLabel.isHidden = true
@@ -220,10 +219,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bestLabel = SKLabelNode(fontNamed: "AvenirNext-Medium")
         bestLabel.fontSize  = 22
         bestLabel.fontColor = SKColor(white: 1, alpha: 0.85)
-        bestLabel.position  = CGPoint(x: size.width / 2, y: size.height - safeTop - 110)
+        bestLabel.position  = CGPoint(x: size.width / 2, y: size.height - 110)
         bestLabel.zPosition = 20
         bestLabel.isHidden  = true
         addChild(bestLabel)
+
+        // Defer safe-area adjustment to after the view completes its first layout pass.
+        // On first launch view?.safeAreaInsets is zero during didMove(to:).
+        DispatchQueue.main.async { [weak self] in
+            guard let self, let view = self.view else { return }
+            let safeTop = view.safeAreaInsets.top
+            self.scoreLabel.position.y = self.size.height - safeTop - 80
+            self.bestLabel.position.y  = self.size.height - safeTop - 110
+        }
     }
 
     private func showIdleMessage() {
