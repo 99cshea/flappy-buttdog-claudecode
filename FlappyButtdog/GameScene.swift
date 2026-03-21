@@ -40,8 +40,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     // MARK: - Constants
-    private let flapImpulse: CGFloat  = 139
-    private let gravity: CGFloat      = -43
+    private let flapImpulse: CGFloat  = 111.2
+    private let gravity: CGFloat      = -21.5
     private let pipeGap: CGFloat      = 210
     private let pipeWidth: CGFloat    = 72
     private let pipeSpeed: CGFloat    = 160   // points per second
@@ -65,10 +65,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     private func setupAudio() {
         tootPlayer  = makeAudioPlayer("toot")
+        tootPlayer?.enableRate = true
+        tootPlayer?.prepareToPlay()
         coinPlayer  = makeAudioPlayer("coin")
         punchPlayer = makeAudioPlayer("punch")
         fartPlayer  = makeAudioPlayer("bigfart")
-        tootPlayer?.enableRate = true
     }
 
     private func makeAudioPlayer(_ name: String) -> AVAudioPlayer? {
@@ -504,7 +505,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Tilt buttdog downward as it falls
         if let vy = buttdog.physicsBody?.velocity.dy {
             let targetAngle = max(min(vy * 0.0018, 0.35), -1.1)
-            buttdog.zRotation = buttdog.zRotation + (targetAngle - buttdog.zRotation) * 0.18
+            buttdog.zRotation = buttdog.zRotation + (targetAngle - buttdog.zRotation) * 0.09
         }
     }
 
