@@ -12,6 +12,10 @@
 		AA00000000000000000022 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000012 /* GameScene.swift */; };
 		AA00000000000000000023 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000014 /* Assets.xcassets */; };
 		AA00000000000000000061 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA00000000000000000060 /* SpriteKit.framework */; };
+		AA00000000000000000080 /* toot.caf in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000070 /* toot.caf */; };
+		AA00000000000000000081 /* coin.caf in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000071 /* coin.caf */; };
+		AA00000000000000000082 /* punch.caf in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000072 /* punch.caf */; };
+		AA00000000000000000083 /* bigfart.caf in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000073 /* bigfart.caf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +26,10 @@
 		AA00000000000000000014 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA00000000000000000016 /* FlappyButtdog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlappyButtdog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA00000000000000000060 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
+		AA00000000000000000070 /* toot.caf */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff-core; path = toot.caf; sourceTree = "<group>"; };
+		AA00000000000000000071 /* coin.caf */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff-core; path = coin.caf; sourceTree = "<group>"; };
+		AA00000000000000000072 /* punch.caf */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff-core; path = punch.caf; sourceTree = "<group>"; };
+		AA00000000000000000073 /* bigfart.caf */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff-core; path = bigfart.caf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +61,10 @@
 				AA00000000000000000012 /* GameScene.swift */,
 				AA00000000000000000014 /* Assets.xcassets */,
 				AA00000000000000000013 /* Info.plist */,
+				AA00000000000000000070 /* toot.caf */,
+				AA00000000000000000071 /* coin.caf */,
+				AA00000000000000000072 /* punch.caf */,
+				AA00000000000000000073 /* bigfart.caf */,
 			);
 			path = FlappyButtdog;
 			sourceTree = "<group>";
@@ -132,6 +144,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA00000000000000000023 /* Assets.xcassets in Resources */,
+				AA00000000000000000080 /* toot.caf in Resources */,
+				AA00000000000000000081 /* coin.caf in Resources */,
+				AA00000000000000000082 /* punch.caf in Resources */,
+				AA00000000000000000083 /* bigfart.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,7 +286,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 27;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = FlappyButtdog/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -293,7 +309,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 27;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = FlappyButtdog/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;

@@ -1,4 +1,5 @@
 import SpriteKit
+import AVFoundation
 
 // MARK: - Physics Categories
 private struct Physics {
@@ -23,6 +24,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var groundNode: SKSpriteNode!
     private var scrollingGround: SKNode!
 
+    // MARK: - Audio
+    private var tootPlayer: AVAudioPlayer?
+    private let coinSound  = SKAction.playSoundFileNamed("coin.caf",    waitForCompletion: false)
+    private let punchSound = SKAction.playSoundFileNamed("punch.caf",   waitForCompletion: true)
+    private let fartSound  = SKAction.playSoundFileNamed("bigfart.caf", waitForCompletion: false)
+
     // MARK: - State
     private var state: GameState = .idle
     private var score = 0
@@ -46,12 +53,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity    = CGVector(dx: 0, dy: gravity)
         physicsWorld.contactDelegate = self
 
+        setupAudio()
         setupBackground()
         setupScrollingGround()
         setupGround()
         setupButtdog()
         setupHUD()
         showIdleMessage()
+    }
+
+    private func setupAudio() {
+        if let url = Bundle.main.url(forResource: "toot", withExtension: "caf") {
+            tootPlayer = try? AVAudioPlayer(contentsOf: url)
+            tootPlayer?.enableRate = true
+            tootPlayer?.prepareToPlay()
+        }
+    }
+
+    private func playToot() {
+        guard let player = tootPlayer else { return }
+        player.stop()
+        player.currentTime = 0
+        player.rate = Float.random(in: 0.80...1.20)
+        player.play()
     }
 
     private func setupBackground() {
@@ -217,6 +241,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     private func flap() {
         guard state == .playing else { return }
+        playToot()
         buttdog.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
         buttdog.physicsBody?.applyImpulse(CGVector(dx: 0, dy: flapImpulse))
 
@@ -321,6 +346,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private func triggerDeath() {
         guard state == .playing else { return }
         state = .dead
+
+        run(SKAction.sequence([punchSound, fartSound]), withKey: "deathSounds")
 
         removeAction(forKey: "pipeScheduler")
         scrollingGround.removeAction(forKey: "scroll")
@@ -442,6 +469,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             // Remove the sensor body immediately so a second hitbox shape can't double-score.
             let sensorBody = contact.bodyA.categoryBitMask == Physics.gap ? contact.bodyA : contact.bodyB
             sensorBody.node?.physicsBody = nil
+            run(coinSound)
             score += 1
             scoreLabel.text = "\(score)"
 
