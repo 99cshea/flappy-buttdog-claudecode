@@ -29,6 +29,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var coinPlayer:  AVAudioPlayer?
     private var punchPlayer: AVAudioPlayer?
     private var fartPlayer:  AVAudioPlayer?
+    private let audioQueue = DispatchQueue(label: "com.flappybuttdog.audio", qos: .userInteractive)
 
     // MARK: - State
     private var state: GameState = .idle
@@ -82,10 +83,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private func playToot() {
         guard let player = tootPlayer else { return }
         tootPitch = min(tootPitch + 0.07, 2.0)
-        player.stop()
-        player.currentTime = 0
-        player.rate = max(0.5, min(2.0, tootPitch + Float.random(in: -0.05...0.05)))
-        player.play()
+        let rate = max(0.5, min(2.0, tootPitch + Float.random(in: -0.05...0.05)))
+        audioQueue.async {
+            player.stop()
+            player.currentTime = 0
+            player.rate = rate
+            player.play()
+        }
     }
 
     private func setupBackground() {
@@ -356,10 +360,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         guard state == .playing else { return }
         state = .dead
 
-        punchPlayer?.stop(); punchPlayer?.currentTime = 0; punchPlayer?.play()
         let punchDuration = punchPlayer?.duration ?? 0.3
+        audioQueue.async { [weak self] in
+            self?.punchPlayer?.stop(); self?.punchPlayer?.currentTime = 0; self?.punchPlayer?.play()
+        }
         let playFart = SKAction.run { [weak self] in
-            self?.fartPlayer?.stop(); self?.fartPlayer?.currentTime = 0; self?.fartPlayer?.play()
+            self?.audioQueue.async {
+                self?.fartPlayer?.stop(); self?.fartPlayer?.currentTime = 0; self?.fartPlayer?.play()
+            }
         }
         run(SKAction.sequence([.wait(forDuration: punchDuration), playFart]), withKey: "deathSounds")
 
@@ -483,7 +491,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             // Remove the sensor body immediately so a second hitbox shape can't double-score.
             let sensorBody = contact.bodyA.categoryBitMask == Physics.gap ? contact.bodyA : contact.bodyB
             sensorBody.node?.physicsBody = nil
-            coinPlayer?.stop(); coinPlayer?.currentTime = 0; coinPlayer?.play()
+            audioQueue.async { [weak self] in
+                self?.coinPlayer?.stop(); self?.coinPlayer?.currentTime = 0; self?.coinPlayer?.play()
+            }
             score += 1
             scoreLabel.text = "\(score)"
 

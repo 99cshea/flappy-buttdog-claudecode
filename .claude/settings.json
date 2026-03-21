@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cmd=$(jq -r '.tool_input.command'); echo \"$cmd\" | grep -qE 'git push.*origin.*claude/' || exit 0; branch=$(echo \"$cmd\" | grep -oE 'claude/[^ ]+' | head -1); [ -z \"$branch\" ] && exit 0; gh pr create --base master --head \"$branch\" --fill 2>/dev/null || true",
+            "command": "cmd=$(jq -r '.tool_input.command'); echo \"$cmd\" | grep -qE 'git push' || exit 0; branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null); [[ \"$branch\" == claude/* ]] || exit 0; gh pr view --head \"$branch\" --json number >/dev/null 2>&1 && exit 0; default=$(git remote show origin 2>/dev/null | grep 'HEAD branch' | awk '{print $NF}'); result=$(gh pr create --base \"${default:-main}\" --head \"$branch\" --fill 2>&1); echo \"{\\\"systemMessage\\\": \\\"PR created: $result\\\"}\"",
             "statusMessage": "Opening PR..."
           }
         ]
