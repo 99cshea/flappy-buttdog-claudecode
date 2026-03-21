@@ -439,6 +439,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let masks = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
 
         if masks & Physics.gap != 0 && masks & Physics.buttdog != 0 {
+            // Remove the sensor body immediately so a second hitbox shape can't double-score.
+            let sensorBody = contact.bodyA.categoryBitMask == Physics.gap ? contact.bodyA : contact.bodyB
+            sensorBody.node?.physicsBody = nil
             score += 1
             scoreLabel.text = "\(score)"
 
