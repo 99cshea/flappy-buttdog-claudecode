@@ -504,7 +504,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Tilt buttdog downward as it falls
         if let vy = buttdog.physicsBody?.velocity.dy {
             let targetAngle = max(min(vy * 0.0018, 0.35), -1.1)
-            buttdog.zRotation = buttdog.zRotation + (targetAngle - buttdog.zRotation) * 0.18
+            buttdog.zRotation = buttdog.zRotation + (targetAngle - buttdog.zRotation) * 0.09
         }
     }
 
