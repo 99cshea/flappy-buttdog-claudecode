@@ -25,14 +25,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var scrollingGround: SKNode!
 
     // MARK: - Audio
-    private var tootPlayer: AVAudioPlayer?
-    private let coinSound  = SKAction.playSoundFileNamed("coin.caf",    waitForCompletion: false)
-    private let punchSound = SKAction.playSoundFileNamed("punch.caf",   waitForCompletion: true)
-    private let fartSound  = SKAction.playSoundFileNamed("bigfart.caf", waitForCompletion: false)
+    private var tootPlayer:  AVAudioPlayer?
+    private var coinPlayer:  AVAudioPlayer?
+    private var punchPlayer: AVAudioPlayer?
+    private var fartPlayer:  AVAudioPlayer?
 
     // MARK: - State
     private var state: GameState = .idle
     private var score = 0
+    private var tootPitch: Float = 1.0
     private var bestScore: Int {
         get { UserDefaults.standard.integer(forKey: "bestScore") }
         set { UserDefaults.standard.set(newValue, forKey: "bestScore") }
@@ -63,18 +64,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     private func setupAudio() {
-        if let url = Bundle.main.url(forResource: "toot", withExtension: "caf") {
-            tootPlayer = try? AVAudioPlayer(contentsOf: url)
-            tootPlayer?.enableRate = true
-            tootPlayer?.prepareToPlay()
-        }
+        tootPlayer  = makeAudioPlayer("toot")
+        coinPlayer  = makeAudioPlayer("coin")
+        punchPlayer = makeAudioPlayer("punch")
+        fartPlayer  = makeAudioPlayer("bigfart")
+        tootPlayer?.enableRate = true
+    }
+
+    private func makeAudioPlayer(_ name: String) -> AVAudioPlayer? {
+        guard let url = Bundle.main.url(forResource: name, withExtension: "caf") else { return nil }
+        let player = try? AVAudioPlayer(contentsOf: url)
+        player?.prepareToPlay()
+        return player
     }
 
     private func playToot() {
         guard let player = tootPlayer else { return }
+        tootPitch = min(tootPitch + 0.07, 2.0)
         player.stop()
         player.currentTime = 0
-        player.rate = Float.random(in: 0.80...1.20)
+        player.rate = tootPitch + Float.random(in: -0.12...0.12)
         player.play()
     }
 
@@ -226,6 +235,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - Game Flow
     private func startGame() {
         state = .playing
+        tootPitch = 1.0
 
         messageLabel.removeFromParent()
         scoreLabel.isHidden = false
@@ -347,7 +357,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         guard state == .playing else { return }
         state = .dead
 
-        run(SKAction.sequence([punchSound, fartSound]), withKey: "deathSounds")
+        punchPlayer?.stop(); punchPlayer?.currentTime = 0; punchPlayer?.play()
+        let punchDuration = punchPlayer?.duration ?? 0.3
+        let playFart = SKAction.run { [weak self] in
+            self?.fartPlayer?.stop(); self?.fartPlayer?.currentTime = 0; self?.fartPlayer?.play()
+        }
+        run(SKAction.sequence([.wait(forDuration: punchDuration), playFart]), withKey: "deathSounds")
 
         removeAction(forKey: "pipeScheduler")
         scrollingGround.removeAction(forKey: "scroll")
@@ -469,7 +484,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             // Remove the sensor body immediately so a second hitbox shape can't double-score.
             let sensorBody = contact.bodyA.categoryBitMask == Physics.gap ? contact.bodyA : contact.bodyB
             sensorBody.node?.physicsBody = nil
-            run(coinSound)
+            coinPlayer?.stop(); coinPlayer?.currentTime = 0; coinPlayer?.play()
             score += 1
             scoreLabel.text = "\(score)"
 
