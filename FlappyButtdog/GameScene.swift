@@ -142,7 +142,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         buttdog.position = CGPoint(x: size.width * 0.28, y: size.height * 0.55)
         buttdog.zPosition = 5
 
-        let body = SKPhysicsBody(circleOfRadius: 28)
+        // Two-shape hitbox: circle for head, rect for body.
+        // Excludes ears, cheek/snout, tail, and the empty L-corner between head and torso.
+        // Coordinates are in local (pre-xScale flip) space.
+        let headShape = SKPhysicsBody(circleOfRadius: 13, center: CGPoint(x: -13, y: 10))
+        let bodyShape = SKPhysicsBody(rectangleOf: CGSize(width: 30, height: 20), center: CGPoint(x: 7, y: -9))
+        let body = SKPhysicsBody(bodies: [headShape, bodyShape])
         body.isDynamic = false
         body.allowsRotation = false
         body.categoryBitMask    = Physics.buttdog
