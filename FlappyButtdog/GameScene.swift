@@ -41,7 +41,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: - Constants
     private let flapImpulse: CGFloat  = 111.2
-    private let gravity: CGFloat      = -30.1
+    private let gravity: CGFloat      = -15.05
     private let pipeGap: CGFloat      = 210
     private let pipeWidth: CGFloat    = 72
     private let pipeSpeed: CGFloat    = 160   // points per second
