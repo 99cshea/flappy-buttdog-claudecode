@@ -83,7 +83,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         tootPitch = min(tootPitch + 0.07, 2.0)
         player.stop()
         player.currentTime = 0
-        player.rate = tootPitch + Float.random(in: -0.12...0.12)
+        player.rate = max(0.5, min(2.0, tootPitch + Float.random(in: -0.05...0.05)))
         player.play()
     }
 
@@ -113,9 +113,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             (0, 0, 50, 30), (-30, 10, 40, 25), (30, 10, 40, 25)
         ]
         for (x, y, w, h) in sizes {
-            let blob = SKShapeNode(ellipseOf: CGSize(width: w, height: h))
-            blob.fillColor = .white
-            blob.strokeColor = .clear
+            let blob = SKSpriteNode(color: .white, size: CGSize(width: w, height: h))
             blob.alpha = 0.85
             blob.position = CGPoint(x: x, y: y)
             node.addChild(blob)
