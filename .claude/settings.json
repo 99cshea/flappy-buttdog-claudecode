@@ -1,5 +1,17 @@
 {
   "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cmd=$(jq -r '.tool_input.command'); echo \"$cmd\" | grep -qE 'git push.*origin.*claude/' || exit 0; branch=$(echo \"$cmd\" | grep -oE 'claude/[^ ]+' | head -1); [ -z \"$branch\" ] && exit 0; gh pr create --base master --head \"$branch\" --fill 2>/dev/null || true",
+            "statusMessage": "Opening PR..."
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Bash",
