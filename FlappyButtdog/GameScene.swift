@@ -148,6 +148,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let headShape = SKPhysicsBody(circleOfRadius: 13, center: CGPoint(x: -13, y: 10))
         let bodyShape = SKPhysicsBody(rectangleOf: CGSize(width: 30, height: 20), center: CGPoint(x: 7, y: -9))
         let body = SKPhysicsBody(bodies: [headShape, bodyShape])
+        // Preserve original mass so flapImpulse/gravity feel unchanged.
+        // Original hitbox was circleOfRadius:28 → mass ≈ π·28²
+        body.mass = .pi * 28 * 28
         body.isDynamic = false
         body.allowsRotation = false
         body.categoryBitMask    = Physics.buttdog
